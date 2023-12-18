@@ -4,6 +4,7 @@
 
 #include <string.h>
 #include <tuple>
+#include <string>
 
 #define cart_grid_leveling_strategy_checksum CHECKSUM("rectangular-grid")
 
