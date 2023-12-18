@@ -477,7 +477,7 @@ uint32_t Panel::on_select(uint32_t dummy)
     // buzz is ignored on panels that do not support buzz
     this->click_changed = true;
     this->idle_time = 0;
-    lcd->buzz(60, 300); // 50ms 300Hz
+    lcd->buzz(5, 1200); // 50ms 300Hz
     return 0;
 }
 
