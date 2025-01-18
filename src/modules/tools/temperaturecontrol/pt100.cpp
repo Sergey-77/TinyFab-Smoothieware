@@ -55,8 +55,8 @@ void PT100::UpdateConfig(uint16_t module_checksum, uint16_t name_checksum)
       this->b = THEKERNEL->config->value(module_checksum, name_checksum, yintercept_checksum )->by_default(-18.54F         )->as_number(); // PT100 in the hotend
     }else{
       this->a = THEKERNEL->config->value(module_checksum, name_checksum, pt100_a_checksum )->by_default( 0.000000174674754F )->as_number(); // default values
-      this->b = THEKERNEL->config->value(module_checksum, name_checksum, pt100_b_checksum )->by_default( 0.022383F          )->as_number(); // for Cetus mk3
-      this->c = THEKERNEL->config->value(module_checksum, name_checksum, pt100_c_checksum )->by_default( -4.00648F          )->as_number(); // 
+      this->b = THEKERNEL->config->value(module_checksum, name_checksum, pt100_b_checksum )->by_default( 0.02238F           )->as_number(); // for Cetus mk3
+      this->c = THEKERNEL->config->value(module_checksum, name_checksum, pt100_c_checksum )->by_default( -4.006F            )->as_number(); // 
     }
     THEKERNEL->adc->enable_pin(&thermistor_pin);
 
