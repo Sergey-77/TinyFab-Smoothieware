@@ -1,4 +1,4 @@
-**This is a fork of Smoothieware. It is updated to work with the TinyFab CPU, LCD and thermistor. You can find more information on the [[https://www.tinyfab.xyz/|website of TinyFab]].**
+**This is a fork of Smoothieware. It is updated to work with the TinyFab CPU, LCD and PT100 RTD. **
 
 **NOTE:** for binaries use the **releases** on the right. Do **not** use the binaries within {{{FirmwareBin}}}
 
