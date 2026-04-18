@@ -1349,6 +1349,17 @@ void SimpleShell::jog(string parameters, StreamOutput *stream)
         return;
     }
 
+    if(THEKERNEL->is_halted()) {
+        // if we are in ALARM state and cont mode we send relevant error response
+        if(THEKERNEL->is_grbl_mode()) {
+            stream->printf("error:Alarm lock\n");
+        } else {
+            stream->printf("!!\n");
+        }
+        return;
+    }
+
+
     // There is a race condition where a quick press/release could send the ^Y before the $J -c is executed
     // this would result in continuous movement, not a good thing.
     // so check if stop request is true and abort if it is, this means we must leave stop request false after this
@@ -1406,6 +1417,8 @@ void SimpleShell::jog(string parameters, StreamOutput *stream)
         // tell it to run the second block until told to stop
         if(!THECONVEYOR->set_continuous_mode(true)) {
             stream->printf("error:Not enough memory to run continuous mode\n");
+            THECONVEYOR->set_hold(false);
+            THECONVEYOR->flush_queue();
             return;
         }
 
