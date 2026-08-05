@@ -574,7 +574,7 @@ void Robot::on_gcode_received(void *argument)
             case 21: this->inch_mode = false;   break;
 
             case 43:
-                if(gcode->subcode == 1 || gcode->subcode == 2) {
+                if(gcode->subcode >= 1 && gcode->subcode <= 2) {
                     float deltas[3] = {0, 0, 0};
                     if(gcode->has_letter('X')) deltas[X_AXIS] = to_millimeters(gcode->get_value('X'));
                     if(gcode->has_letter('Y')) deltas[Y_AXIS] = to_millimeters(gcode->get_value('Y'));
@@ -582,15 +582,26 @@ void Robot::on_gcode_received(void *argument)
 
                     float x, y, z;
                     std::tie(x, y, z) = tool_offset;
-                    if(deltas[X_AXIS] != 0) x += deltas[X_AXIS];
-                    if(deltas[Y_AXIS] != 0) y += deltas[Y_AXIS];
-                    if(deltas[Z_AXIS] != 0) z += deltas[Z_AXIS];
-                    tool_offset = wcs_t(x, y, z);
-
                     if(gcode->subcode == 2) {
-                        // we also move
+                        // incremental
+                        if(deltas[X_AXIS] != 0) x += deltas[X_AXIS];
+                        if(deltas[Y_AXIS] != 0) y += deltas[Y_AXIS];
+                        if(deltas[Z_AXIS] != 0) z += deltas[Z_AXIS];
+                        // we also move, which is NOT in the spec, but we use this for babysteps
                         delta_move(deltas, this->seek_rate / seconds_per_minute, 3);
+                    } else {
+                        // as per linuxcnc spec, sets the tool offset
+                        // However as machine_position stores the mpos with the old tool position we need to update that as well
+                        // so the next move (regardless of abs/rel) does what is expected
+                        float ox = x, oy = y, oz = z;
+                        if(gcode->has_letter('X')) x = deltas[X_AXIS];
+                        if(gcode->has_letter('Y')) y = deltas[Y_AXIS];
+                        if(gcode->has_letter('Z')) z = deltas[Z_AXIS];
+                        ox = x - ox; oy = y - oy; oz = z - oz;
+                        machine_position[X_AXIS] += ox; machine_position[Y_AXIS] += oy; machine_position[Z_AXIS] += oz;
+                        //compensated_machine_position[X_AXIS] += ox; compensated_machine_position[Y_AXIS] += oy; compensated_machine_position[Z_AXIS] += oz;
                     }
+                    tool_offset = wcs_t(x, y, z);
                 }
                 break;
 
