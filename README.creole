@@ -1,5 +1,10 @@
 **This is a fork of Smoothieware. It is updated to work with the TinyFab CPU, LCD and PT100 RTD. **
 
+*Modified PT100 module to use quadratic polynomial to calculate temperature from ADC value.
+*Added Resistance_to_Temperature_PT100.py and quadratic_polynomial_coefficients.py to repository to
+aid calculation of coefficients for quadratic polynomial formula to put in config file.
+*Config sample is in /ConfigSamples/Snippets/pt100_polynomial.config
+
 **NOTE:** for binaries use the **releases** on the right. Do **not** use the binaries within {{{FirmwareBin}}}
 
 ----
